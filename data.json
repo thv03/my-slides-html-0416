@@ -1,0 +1,244 @@
+{
+  "reportTitle": "Structure-Aware Chunking for Complex Tables in RAG Systems",
+  "author": "講者：李晟允 | 指導老師：馮重緯",
+  "slides": [
+    {
+      "id": 1,
+      "zoneTitle": "Agenda | 核心路徑藍圖",
+      "bullets": [
+        "The Reality Gap：為何傳統 AI 無法落地重工業？",
+        "The Paradigm Shift：從一維文字到二維座標的第一性原理。",
+        "Methodology Architecture：無情機器的四步管線拆解。",
+        "Evidence & Limits：數據實證、防禦機制與失敗極限。",
+        "The Vision：迎向具身智能 (Embodied AI) 的終局。"
+      ],
+      "visualType": "text",
+      "visualContent": "「理解問題的本質，比盲目尋找解決方案更具槓桿率。」"
+    },
+    {
+      "id": 2,
+      "zoneTitle": "1. 產業痛點 (The Reality Gap)",
+      "bullets": [
+        "ASI 願景 vs. 現實泥淖：期待超級智能自動稽核，但土木界 80% 核心知識被封印在高度依賴視覺排版的複雜表格中。",
+        "致命的信任風險：AI 只要看錯一行鋼筋檢驗標準，就會引發巨額重工成本甚至工安危害。",
+        "底線結論：沒有 100% 的事實準確度，AI 在重工業的落地率就是零。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 2.png"
+    },
+    {
+      "id": 3,
+      "zoneTitle": "2. 現有技術的挫敗 (Illusions of RAG)",
+      "bullets": [
+        "RAG 流程盲區：精確度取決於「解析與分塊」，但傳統工具預設處理「一維純文字」。",
+        "盲目切割的災難：傳統「遞迴分塊」只算字數，粗暴切斷邏輯相連的工項與規範，導致語意碎片化。",
+        "慘烈的實證數據：傳統 RAG 答案準確率僅 0.32，即使換用 LlamaParse 視覺解析，也僅有 0.43。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 1.png"
+    },
+    {
+      "id": 4,
+      "zoneTitle": "3. 預期 ROI (The Sweet Spot)",
+      "bullets": [
+        "準確率翻倍 (Answer Accuracy)：將生成答案的絕對準確率從 32% 暴力拉升至 73%。",
+        "雜訊近乎歸零 (Content Precision)：內容精確度從 0.57 飆升至逼近滿分的 0.92。",
+        "風險溢價轉換：以極低的研發導入成本，換取工程合規稽核信任度與隱形成本的指數級下降。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 8.png"
+    },
+    {
+      "id": 5,
+      "zoneTitle": "4. 視角切換 (The Paradigm Shift)",
+      "bullets": [
+        "放棄文字思維：停止把工程表格當作「一段由左唸到右的文字」。",
+        "回歸第一性原理：將表格還原為「二維空間座標網格」，視覺空間對齊本身就是高密度的語意編碼。",
+        "座標即語意：沒有精確的物理空間座標就沒有後續邏輯；解析與分塊是緊密耦合的生命共同體。"
+      ],
+      "visualType": "text",
+      "visualContent": "「當你改變觀察事物的維度，問題本身就會解體。」"
+    },
+    {
+      "id": 6,
+      "zoneTitle": "5. 論文核心主張 (The Core Thesis)",
+      "bullets": [
+        "解析端修正：拒絕攤平，強制提取包含實體格線的座標藍圖。",
+        "分塊端修正：廢除字數切割，改以「表格空間關聯」進行不可分割的語意綁定。",
+        "核心主張：透過結構感知分塊，將死板排版轉譯為動態的知識圖譜。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 4.png"
+    },
+    {
+      "id": 7,
+      "zoneTitle": "6. 系統總覽圖 (The Architecture)",
+      "bullets": [
+        "封閉式管線：Input (複雜表格 PDF) ➔ 4 步分塊演算法 ➔ Output (乾淨的三元組字典)。",
+        "核心工具鏈：解析依賴 Camelot，向量庫採用 ChromaDB，生成大腦為 LLaMA 3 70B。",
+        "雲地混合部署：解析與 ChromaDB 完全在地端運行確保機密，LLM 依資安需求彈性調用算力。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 4.png"
+    },
+    {
+      "id": 8,
+      "zoneTitle": "7. Step 1: 高保真網格解析",
+      "bullets": [
+        "物理邊框提取：利用 Camelot (Lattice 模式)，精準偵測物理格線，無損還原複雜巢狀矩陣。",
+        "拒絕空白猜測：啟用 Copy Text 功能，自動將合併儲存格的空白水平或垂直填補，守住對齊基準。",
+        "保留絕對座標：將視覺結構徹底轉化為機器可讀的嚴謹網格座標系。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 6.png"
+    },
+    {
+      "id": 9,
+      "zoneTitle": "8. Step 2: 主鍵與標題提取",
+      "bullets": [
+        "定位表格靈魂：直接從解析網格頂部或左側，提取高階標籤（如：工程階段、樓層）。",
+        "建立分組主鍵：這些標籤將成為所有底層數據絕對對齊的 Grouping Keys。",
+        "過濾雜訊邊界：非網格內的無效文字直接摒棄，確保後續綁定的絕對純淨度。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Table 1.png"
+    },
+    {
+      "id": 10,
+      "zoneTitle": "9. Step 3: 實體映射與結轉",
+      "bullets": [
+        "實體座標映射：精準對應奇數欄（科目/工項）與偶數欄（學分/數值）的綁定關係。",
+        "向下延續邏輯 (Carry-Forward)：針對合併空白，系統自動將父層類別向下繼承，消滅孤兒數據。",
+        "邏輯驗證防護：檢查數值欄是否有效，主動剔除無效空白列，避免垃圾進垃圾出。"
+      ],
+      "visualType": "text",
+      "visualContent": "↓\n\n[ Category 父節點 ]\n↳ 垂直向下繼承\n[ 空白子節點填補 ]\n\n「消滅孤立無援的數據碎片，是建立機器邏輯的第一步。」"
+    },
+    {
+      "id": 11,
+      "zoneTitle": "10. Step 4: 三元組建構",
+      "bullets": [
+        "強制綁定：將座標內的資料，打包成不可分割的 (工項, 數值, 規範類別) 結構化三元組。",
+        "還原脈絡：將三元組全數收納至所屬的「主鍵（如工程期）」下，形成嚴密的階層式字典。",
+        "消滅碎片化：產出 100% 具備獨立上下文的純淨知識塊，隨時待命被檢索。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 4-1.png"
+    },
+    {
+      "id": 12,
+      "zoneTitle": "11. 向量化與存儲 (Storage)",
+      "bullets": [
+        "高維語意轉換：使用 BAAI/bge-m3 模型，將乾淨的三元組降維打擊，轉換為高密度向量。",
+        "保留元數據 (Metadata)：為資料塊附加結構化的 Metadata，大幅提升未來的索引維度與精準度。",
+        "地端安全存儲：將向量數據封存入 ChromaDB，確保商業與工程機密絕對不外洩且調用極速。"
+      ],
+      "visualType": "text",
+      "visualContent": "[ ChromaDB Vector Space ]\n\n[ 0.012, -0.931, 0.442, 0.119 ... ]\n\n「所有的物理結構與法規，最終都必須轉化為數學維度，才能被超級大腦吞噬。」"
+    },
+    {
+      "id": 13,
+      "zoneTitle": "12. 檢索與生成 (Generation)",
+      "bullets": [
+        "相似度精準匹配：透過餘弦相似度 (Cosine Similarity)，瞬間撈出 Top-k 個最相關的三元組。",
+        "純淨上下文注入：將毫無雜訊的知識塊作為 Context 餵給 LLaMA 3 70B 進行推論。",
+        "零幻覺輸出保證：LLM 無需再盲目「猜測」欄位關聯，而是基於完美綁定的事實給出絕對解答。"
+      ],
+      "visualType": "text",
+      "visualContent": "User Query\n↓\nCosine Similarity (Top-K)\n↓\nLLaMA 3 70B\n↓\nAbsolute Answer\n\n「大語言模型不再需要通靈，我們只餵給它純粹的真相。」"
+    },
+    {
+      "id": 14,
+      "zoneTitle": "13. 實驗設計與防禦機制 (RAGAS)",
+      "bullets": [
+        "拒絕球員兼裁判：生成使用 LLaMA 3 70B，評估使用 OpenAI GPT-3.5 Turbo，確保交叉驗證客觀性。",
+        "RAGAS 的說服力 (LLM-as-a-judge)：拒絕死板的字串比對，以類人邏輯嚴格審視 6 項指標。",
+        "三大核心驗收：剔除雜訊，我們只看最致命的三項——對不對 (Accuracy)、純不純 (Precision)、有沒有幻覺 (Faithfulness)。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Table 2.png"
+    },
+    {
+      "id": 15,
+      "zoneTitle": "14. 與舊有方法比較 (The 0.73 Origin)",
+      "bullets": [
+        "PyPDFLoader 崩潰：傳統分塊完全破壞了物理結構，準確率僅剩 0.32。",
+        "LlamaParse 的虛高假象：先進視覺工具在一致性拿 0.81 是因詞彙重疊，但上下文嚴重錯位，真實準確率僅 0.43。",
+        "提出方法的輾壓：唯有「結構感知分塊」，能無損保留語意，真正達到 0.73 的高準確率。"
+      ],
+      "visualType": "image",
+      "visualContent": "./assets/Figure 8.png"
+    },
+    {
+      "id": 16,
+      "zoneTitle": "15. 成本與效率的極致 (Token ROI)",
+      "bullets": [
+        "捨棄無效召回率：傳統靠「撈出整片海」來答題，不僅浪費 Token 更引發 LLM 注意力迷失。",
+        "0.92 的內容精確度：本系統改為精準狙擊，只檢索「數量極少、但純淨度極高」的資料塊。",
+        "商業 ROI 鐵律：不計成本的精確是愚蠢，不計精確的便宜是犯罪。我們用最低消耗換取最高準確率。"
+      ],
+      "visualType": "text",
+      "visualContent": "[ 極低 Token 消耗 ] ⬇\nvs.\n[ 0.92 內容精確度 ] ⬆\n\n「精確度不是算力的堆疊，而是雜訊的剔除。」"
+    },
+    {
+      "id": 17,
+      "zoneTitle": "16. 致命限制：微觀極限",
+      "bullets": [
+        "成也網格，敗也網格：系統極度依賴「可見的實體格線」來建立座標系。",
+        "肉眼難辨的崩潰：掃描品質低落、微小的格線斷裂 (Gaps)，會直接摧毀語意分塊 (Ambiguous)。",
+        "工程師的批判性認知：我們深知邊界，這不是萬能玩具，這是一把對輸入品質有極高要求的手術刀。"
+      ],
+      "visualType": "image",
+      "visualContent": [
+        "./assets/Figure 10c-1.png",
+        "./assets/Figure 10c-2.png"
+      ]
+    },
+    {
+      "id": 18,
+      "zoneTitle": "17. 致命限制：宏觀極限",
+      "bullets": [
+        "方向判斷失效：工地常見的「A3 橫向排版 (Landscape)」會導致系統行列誤判，整個網格顛倒。",
+        "混排資訊遺漏：表格中若夾雜大量純文字說明，會導致非表格資料直接被演算法略過與遺失。",
+        "下一代試金石：這些失敗案例，正是我們邁向下一代多模態架構 (VLM) 必要的養分與基石。"
+      ],
+      "visualType": "image",
+      "visualContent": [
+        "./assets/Figure 9c-1.png",
+        "./assets/Figure 9c-2.png"
+      ]
+    },
+    {
+      "id": 19,
+      "zoneTitle": "18. 商業遷移與多模態管線",
+      "bullets": [
+        "解耦寫死規則：坦承現狀，目前框架為特定學術表格寫死。若要應用於異質工程表單，需「手動重新配置分塊規則」。",
+        "攻克圖文表混排：未來前端將部署 LayoutLM 進行版面切分 (Region Analysis)，以工程 NER 取代手寫規則。",
+        "混合管線分流：表格走本框架、文字走傳統分塊、圖紙交給 VLM，最終統一檢索，實現無死角工程 Agent。"
+      ],
+      "visualType": "text",
+      "visualContent": "PDF Document ➔ LayoutLM\n↓\n[ 表格 ➔ 本框架 ]\n[ 文字 ➔ 標準分塊 ]\n[ 圖紙 ➔ GPT-4V ]\n↓\nChromaDB 統一檢索"
+    },
+    {
+      "id": 20,
+      "zoneTitle": "19. 最高格局 (Embodied AI)",
+      "bullets": [
+        "超越 Chatbot：這篇論文表面在切分表格，本質是在打造 AI 的「自主合規與知識攝取大腦」。",
+        "無損攝取人類底蘊：未來的具身智能不能只在沙盒運作，它們必須自主閱讀人類用「結構化排版」累積百年的工業標準。",
+        "串聯動作策略：將無損抓取的 DH 參數表輸入給 ACT (Action Chunking Transformers)，直接將紙本規格轉化為自主維修動作。"
+      ],
+      "visualType": "text",
+      "visualContent": "Human Layouts (DH Parameters)\n↓\nStructure-Aware Chunking\n↓\nRobotic Action (ACT)\n\n「讓未來的具身智能，無損繼承人類的工業底蘊。」"
+    },
+    {
+      "id": 21,
+      "zoneTitle": "20. 終局與 Q&A",
+      "bullets": [
+        "視覺欺騙：表格是為了人類視覺而發明的格式；在 AI 能完美轉譯它之前，所謂的自動化都只是風險的轉移。",
+        "信任貨幣：唯有 100% 鎖死結構的精確度，人工智慧在重工業的落地才具有現實意義。"
+      ],
+      "visualType": "text",
+      "visualContent": "Q & A\n\nSpeaker: 李晟允\nAdvisor: 馮重緯"
+    }
+  ]
+}
