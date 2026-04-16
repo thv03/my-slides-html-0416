@@ -25,10 +25,13 @@
         <div id="content-view" class="absolute inset-0 flex flex-col bg-gray-900 z-30 hidden transition-opacity duration-300">
             <main class="flex-1 min-h-0 grid grid-cols-2">
                 
-                <section class="p-10 pb-16 pt-12 border-r border-gray-700 flex flex-col justify-start overflow-hidden">
+                <section class="p-10 pb-16 pt-12 border-r border-gray-700 flex flex-col justify-start overflow-hidden relative">
                     <h2 id="zone-title" class="text-[24px] font-semibold mb-6 border-l-4 border-blue-500 pl-4 text-white shrink-0">載入中...</h2>
-                    <ul id="takeaways" class="space-y-6 text-[16px] leading-relaxed text-gray-300 list-disc pl-6">
+                    <ul id="takeaways" class="space-y-6 text-[16px] leading-relaxed text-gray-300 list-disc pl-6 shrink-0">
                         </ul>
+                    
+                    <div id="left-visual-container" class="mt-8 flex-1 min-h-0 w-full relative">
+                        </div>
                 </section>
 
                 <section class="p-6 bg-gray-800/50 flex flex-col min-h-0 overflow-hidden relative">
@@ -86,21 +89,37 @@
                     `<li><span class="text-blue-300 font-bold">${b.split('：')[0]}</span>：${b.split('：')[1] || ''}</li>`
                 ).join('');
 
+                // --- 帝國升級模組：左側輔助圖片渲染 ---
+                const leftVisualDiv = document.getElementById('left-visual-container');
+                if (slide.leftVisual) {
+                    // object-left-top 確保圖片靠左上對齊文字，不會在中間亂飄
+                    leftVisualDiv.innerHTML = `<img src="${slide.leftVisual}" class="absolute inset-0 w-full h-full object-contain object-left-top drop-shadow-xl pr-4">`;
+                } else {
+                    leftVisualDiv.innerHTML = ''; // 沒有設定就清空
+                }
+
                 
-                // --- 帝國升級模組：陣列視覺渲染引擎 ---
+                                // --- 帝國升級模組：多圖陣列自適應引擎 ---
+                // --- 帝國升級模組：多圖陣列與幕間切換引擎 ---
                 const visualDiv = document.getElementById('visual-container');
                 if (slide.visualType === 'image') {
-                    // 判斷是否為陣列 (多張圖片)
                     if (Array.isArray(slide.visualContent)) {
-                        visualDiv.innerHTML = `<div class="absolute inset-0 p-4 grid grid-rows-2 gap-6">` + 
+                        let gridClass = 'grid-rows-2';
+                        if (slide.visualContent.length > 2) {
+                            gridClass = 'grid-cols-2 grid-rows-2';
+                        }
+                        visualDiv.innerHTML = `<div class="absolute inset-0 p-4 grid ${gridClass} gap-6">` + 
                             slide.visualContent.map(img => `<div class="relative w-full h-full"><img src="${img}" class="absolute inset-0 w-full h-full object-contain drop-shadow-2xl"></div>`).join('') + 
                             `</div>`;
                     } else {
-                        // 單張圖片維持霸權佈局
                         visualDiv.innerHTML = `<img src="${slide.visualContent}" class="absolute inset-0 w-full h-full object-contain drop-shadow-2xl">`;
                     }
+                } else if (slide.visualType === 'transition') {
+                    // 專屬的幕間大字體渲染邏輯 (利用 | 符號切分中英文)
+                    const parts = slide.visualContent.split('|');
+                    visualDiv.innerHTML = `<div class="w-full h-full flex flex-col justify-center items-center text-center"><h1 class="text-[48px] font-bold text-white mb-6 tracking-widest drop-shadow-lg">${parts[0].trim()}</h1><h2 class="text-[24px] text-blue-500 font-light tracking-widest">${parts[1] ? parts[1].trim() : ''}</h2></div>`;
                 } else {
-                    visualDiv.innerHTML = `<p class="text-[16px] leading-loose text-blue-200 p-8">${slide.visualContent}</p>`;
+                    visualDiv.innerHTML = `<p class="text-[16px] leading-loose text-blue-200 p-8 whitespace-pre-line">${slide.visualContent}</p>`;
                 }
             }
         }
